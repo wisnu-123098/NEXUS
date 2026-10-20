@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotesShare SMA - Platform Berbagi Catatan Kelas 11</title>
+    <!-- Menghubungkan File CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="logo">
+            📚 NotesShare SMA
+        </div>
+        <button class="nav-btn" onclick="toggleModal(true)">+ Unggah Catatan</button>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <h1>Pusat Catatan & Ringkasan Kelas 11</h1>
+        <p>Cari ringkasan materi, rumus cepat, dan peta konsep dari teman-teman seangkatanmu dengan mudah.</p>
+    </section>
+
+    <!-- SEARCH BAR -->
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari mata pelajaran atau topik (contoh: Matematika, Sejarah...)" onkeyup="searchNotes()">
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <div class="section-title">Catatan Terbaru</div>
+        <div class="notes-grid" id="notesGrid">
+            <!-- Kartu Catatan 1 -->
+            <div class="note-card" data-title="matematika barisan dan deret">
+                <div>
+                    <span class="badge">Matematika Kelas 11</span>
+                    <h3>Barisan & Deret Aritmatika</h3>
+                    <p>Rumus cepat suku ke-n, jumlah n suku pertama, beserta 5 contoh soal pembahasan.</p>
+                </div>
+                <div class="note-footer">
+                    <span>Oleh: Budi (XI IPA)</span>
+                    <button class="btn-download" onclick="downloadNote('Barisan & Deret Aritmatika')">Unduh</button>
+                </div>
+            </div>
+
+            <!-- Kartu Catatan 2 -->
+            <div class="note-card" data-title="sejarah indonesia kolonialisme">
+                <div>
+                    <span class="badge">Sejarah Indonesia</span>
+                    <h3>Dampak Kolonialisme & Imperialisme</h3>
+                    <p>Peta konsep sistem tanam paksa, politik pintu terbuka, dan perlawanan bangsa Indonesia.</p>
+                </div>
+                <div class="note-footer">
+                    <span>Oleh: Siti (XI IPS)</span>
+                    <button class="btn-download" onclick="downloadNote('Dampak Kolonialisme')">Unduh</button>
+                </div>
+            </div>
+
+            <!-- Kartu Catatan 3 -->
+            <div class="note-card" data-title="fisika kalor dan termodinamika">
+                <div>
+                    <span class="badge">Fisika</span>
+                    <h3>Teori Kinetik Gas & Kalor</h3>
+                    <p>Rangkuman rumus termodinamika lengkap dengan grafik tekanan volume.</p>
+                </div>
+                <div class="note-footer">
+                    <span>Oleh: Reza (XI IPA)</span>
+                    <button class="btn-download" onclick="downloadNote('Teori Kinetik Gas')">Unduh</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL TAMBAH CATATAN -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal-box">
+            <h2>Bagikan Catatanmu</h2>
+            <div class="form-group">
+                <label>Mata Pelajaran / Kategori</label>
+                <input type="text" id="inputSubject" placeholder="Contoh: Biologi Kelas 11">
+            </div>
+            <div class="form-group">
+                <label>Judul Catatan</label>
+                <input type="text" id="inputTitle" placeholder="Contoh: Sistem Ekskresi Manusia">
+            </div>
+            <div class="form-group">
+                <label>Deskripsi Singkat</label>
+                <textarea id="inputDesc" rows="3" placeholder="Jelaskan isi singkat ringkasanmu..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Nama Pembuat</label>
+                <input type="text" id="inputAuthor" placeholder="Nama & Kelasmu">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="toggleModal(false)">Batal</button>
+                <button class="btn-submit" onclick="addNewNote()">Simpan & Unggah</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 NotesShare SMA - Dibangun dengan HTML, CSS, & JavaScript untuk Portofolio GitHub.</p>
+    </footer>
+
+    <!-- Menghubungkan File JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
