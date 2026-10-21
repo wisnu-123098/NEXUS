@@ -3,40 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NotesShare SMA - Platform Berbagi Catatan Kelas 11</title>
+    <title>NotesShare SMANEKA - Platform Berbagi Catatan</title>
     <!-- Komentar: Menghubungkan file gaya CSS eksternal -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Komentar: Bagian Header / Menu Atas -->
+    <!-- Komentar: Bagian Header / Menu Atas dengan Logo -->
     <header>
         <div class="logo">
-            <!-- Komentar: Menambahkan Gambar Logo SMANEKA3.jpg -->
-            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjyFQBnfPD9f9ubP2808EGs47t_3Qd40i0AvKRfjZ7nZqHKEFxsrX3sskWWz2US6BeB7W9ELOiEJ0xS31oyRKuiocW2njHPrfdHUfhT8MJEut1vrl3SIvLu8hrFJ7n0oiQKXJXAPn6ZIOpT/s1600/SMANEKA3.png.jpg" alt="Logo SMA Negeri Kesamben" class="logo-img">
+            <!-- Komentar: Menampilkan Gambar Logo SMANEKA -->
+            <img src="SMANEKA3.jpg" alt="Logo SMA Negeri Kesamben" class="logo-img">
             <span>NotesShare SMANEKA</span>
         </div>
-        <!-- Komentar: Tombol interaktif untuk memunculkan kotak unggah catatan -->
+        <!-- Komentar: Tombol untuk membuka form unggah catatan -->
         <button class="nav-btn" onclick="toggleModal(true)">+ Unggah Catatan</button>
     </header>
 
-    <!-- Komentar: Bagian Utama Pengantar (HERO SECTION) -->
+    <!-- Komentar: Bagian Pengantar (HERO SECTION) -->
     <section class="hero">
         <h1>Pusat Catatan & Rangkuman Pelajaran</h1>
         <p>Cari ringkasan materi, rumus cepat, dan peta konsep dari siswa SMA Negeri Kesamben.</p>
     </section>
 
+    <!-- Komentar: Tombol Filter Berdasarkan Kelas (Kelas 10, 11, 12) -->
+    <div class="filter-container">
+        <button class="filter-btn active" onclick="filterGrade('all')">Semua Kelas</button>
+        <button class="filter-btn" onclick="filterGrade('10')">Kelas 10</button>
+        <button class="filter-btn" onclick="filterGrade('11')">Kelas 11</button>
+        <button class="filter-btn" onclick="filterGrade('12')">Kelas 12</button>
+    </div>
+
     <!-- Komentar: Kotak Pencarian Catatan -->
     <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari mata pelajaran atau topik (contoh: Matematika, Sejarah...)" onkeyup="searchNotes()">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari mata pelajaran atau topik..." onkeyup="searchNotes()">
     </div>
 
     <!-- Komentar: Bagian Konten Utama Daftar Catatan -->
     <main>
-        <div class="section-title">Catatan Terbaru</div>
+        <div class="section-title">Daftar Catatan Siswa</div>
         <div class="notes-grid" id="notesGrid">
-            <!-- Komentar: Kartu Catatan 1 -->
-            <div class="note-card" data-title="matematika barisan dan deret">
+            
+            <!-- Komentar: Kartu Catatan Kelas 10 -->
+            <div class="note-card" data-grade="10" data-title="biologi keanekaragaman hayati">
+                <div>
+                    <span class="badge">Biologi Kelas 10</span>
+                    <h3>Keanekaragaman Hayati & Ekosistem</h3>
+                    <p>Ringkasan materi tingkatan keanekaragaman hayati, flora, fauna, dan komponen ekosistem.</p>
+                </div>
+                <div class="note-footer">
+                    <span>Oleh: Rina (X E-1)</span>
+                    <button class="btn-download" onclick="downloadNote('Keanekaragaman Hayati')">Unduh</button>
+                </div>
+            </div>
+
+            <!-- Komentar: Kartu Catatan Kelas 11 -->
+            <div class="note-card" data-grade="11" data-title="matematika barisan dan deret">
                 <div>
                     <span class="badge">Matematika Kelas 11</span>
                     <h3>Barisan & Deret Aritmatika</h3>
@@ -48,31 +70,19 @@
                 </div>
             </div>
 
-            <!-- Komentar: Kartu Catatan 2 -->
-            <div class="note-card" data-title="sejarah indonesia kolonialisme">
+            <!-- Komentar: Kartu Catatan Kelas 12 -->
+            <div class="note-card" data-grade="12" data-title="kimia sel volta dan redoks">
                 <div>
-                    <span class="badge">Sejarah Indonesia</span>
-                    <h3>Dampak Kolonialisme & Imperialisme</h3>
-                    <p>Peta konsep sistem tanam paksa, politik pintu terbuka, dan perlawanan bangsa Indonesia.</p>
+                    <span class="badge">Kimia Kelas 12</span>
+                    <h3>Sel Volta & Reaksi Redoks</h3>
+                    <p>Cara mudah menghitung potensial sel standar (E°cell) dan diagram sel elektrokimia.</p>
                 </div>
                 <div class="note-footer">
-                    <span>Oleh: Siti (XI IPS)</span>
-                    <button class="btn-download" onclick="downloadNote('Dampak Kolonialisme')">Unduh</button>
+                    <span>Oleh: Dimas (XII MIPA)</span>
+                    <button class="btn-download" onclick="downloadNote('Sel Volta & Reaksi Redoks')">Unduh</button>
                 </div>
             </div>
 
-            <!-- Komentar: Kartu Catatan 3 -->
-            <div class="note-card" data-title="fisika kalor dan termodinamika">
-                <div>
-                    <span class="badge">Fisika</span>
-                    <h3>Teori Kinetik Gas & Kalor</h3>
-                    <p>Rangkuman rumus termodinamika lengkap dengan grafik tekanan volume.</p>
-                </div>
-                <div class="note-footer">
-                    <span>Oleh: Reza (XI IPA)</span>
-                    <button class="btn-download" onclick="downloadNote('Teori Kinetik Gas')">Unduh</button>
-                </div>
-            </div>
         </div>
     </main>
 
@@ -81,12 +91,20 @@
         <div class="modal-box">
             <h2>Bagikan Catatanmu</h2>
             <div class="form-group">
+                <label>Pilih Tingkat Kelas</label>
+                <select id="inputGrade" class="search-input">
+                    <option value="10">Kelas 10</option>
+                    <option value="11">Kelas 11</option>
+                    <option value="12">Kelas 12</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label>Mata Pelajaran / Kategori</label>
-                <input type="text" id="inputSubject" placeholder="Contoh: Biologi Kelas 11">
+                <input type="text" id="inputSubject" placeholder="Contoh: Ekonomi">
             </div>
             <div class="form-group">
                 <label>Judul Catatan</label>
-                <input type="text" id="inputTitle" placeholder="Contoh: Sistem Ekskresi Manusia">
+                <input type="text" id="inputTitle" placeholder="Contoh: Permintaan dan Penawaran">
             </div>
             <div class="form-group">
                 <label>Deskripsi Singkat</label>
@@ -103,7 +121,7 @@
         </div>
     </div>
 
-    <!-- Komentar: Bagian Bawah Web (FOOTER) - Nama Pembuat Ditambahkan di Sini -->
+    <!-- Komentar: Bagian Bawah Web (FOOTER) dengan Nama Pembuat -->
     <footer>
         <p>&copy; 2026 NotesShare SMA Negeri Kesamben Jombang.</p>
         <p>Dibuat dan dikembangkan oleh: <strong>Siswa SMANEKA / [Nama Anda]</strong></p>
