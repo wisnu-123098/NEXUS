@@ -44,7 +44,6 @@ header {
     gap: 0.75rem;
 }
 
-/* Komentar: Pengaturan ukuran gambar logo agar rapi */
 .logo-img {
     height: 40px;
     width: auto;
@@ -69,7 +68,7 @@ header {
 /* Komentar: Tampilan Bagian Pengantar / Hero Section */
 .hero {
     text-align: center;
-    padding: 3rem 5% 2rem;
+    padding: 2.5rem 5% 1rem;
     max-width: 700px;
     margin: 0 auto;
 }
@@ -83,7 +82,40 @@ header {
 .hero p {
     color: var(--text-muted);
     font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Komentar: Tampilan Tombol Filter Kelas */
+.filter-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
     margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    padding: 0 5%;
+}
+
+.filter-btn {
+    background: white;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.filter-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
 }
 
 /* Komentar: Tampilan Kotak Pencarian */
@@ -236,12 +268,14 @@ main {
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 0.6rem;
     border: 1px solid var(--border-color);
     border-radius: 6px;
     font-size: 0.95rem;
+    background: white;
 }
 
 .modal-actions {
