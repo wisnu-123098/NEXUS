@@ -4,29 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NotesShare SMANEKA - Platform Berbagi Catatan</title>
-    <!-- Komentar: Menghubungkan file gaya CSS eksternal -->
+    <!-- Menghubungkan file gaya CSS eksternal -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Komentar: Bagian Header / Menu Atas dengan Logo -->
+    <!-- Header / Menu Atas dengan Logo -->
     <header>
         <div class="logo">
-            <!-- Komentar: Menampilkan Gambar Logo SMANEKA -->
             <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjyFQBnfPD9f9ubP2808EGs47t_3Qd40i0AvKRfjZ7nZqHKEFxsrX3sskWWz2US6BeB7W9ELOiEJ0xS31oyRKuiocW2njHPrfdHUfhT8MJEut1vrl3SIvLu8hrFJ7n0oiQKXJXAPn6ZIOpT/s1600/SMANEKA3.png.jpg" alt="Logo SMA Negeri Kesamben" class="logo-img">
             <span>NotesShare SMANEKA</span>
         </div>
-        <!-- Komentar: Tombol untuk membuka form unggah catatan -->
         <button class="nav-btn" onclick="toggleModal(true)">+ Unggah Catatan</button>
     </header>
 
-    <!-- Komentar: Bagian Pengantar (HERO SECTION) -->
+    <!-- Bagian Pengantar (HERO SECTION) -->
     <section class="hero">
         <h1>Pusat Catatan & Rangkuman Pelajaran</h1>
         <p>Cari ringkasan materi, rumus cepat, dan peta konsep dari siswa SMA Negeri Kesamben.</p>
     </section>
 
-    <!-- Komentar: Tombol Filter Berdasarkan Kelas (Kelas 10, 11, 12) -->
+    <!-- Tombol Filter Berdasarkan Kelas (Kelas 10, 11, 12) -->
     <div class="filter-container">
         <button class="filter-btn active" onclick="filterGrade('all')">Semua Kelas</button>
         <button class="filter-btn" onclick="filterGrade('10')">Kelas 10</button>
@@ -34,59 +32,20 @@
         <button class="filter-btn" onclick="filterGrade('12')">Kelas 12</button>
     </div>
 
-    <!-- Komentar: Kotak Pencarian Catatan -->
+    <!-- Kotak Pencarian Catatan -->
     <div class="search-container">
         <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari mata pelajaran atau topik..." onkeyup="searchNotes()">
     </div>
 
-    <!-- Komentar: Bagian Konten Utama Daftar Catatan -->
+    <!-- Bagian Konten Utama Daftar Catatan -->
     <main>
         <div class="section-title">Daftar Catatan Siswa</div>
         <div class="notes-grid" id="notesGrid">
-            
-            <!-- Komentar: Kartu Catatan Kelas 10 -->
-            <div class="note-card" data-grade="10" data-title="biologi keanekaragaman hayati">
-                <div>
-                    <span class="badge">Biologi Kelas 10</span>
-                    <h3>Keanekaragaman Hayati & Ekosistem</h3>
-                    <p>Ringkasan materi tingkatan keanekaragaman hayati, flora, fauna, dan komponen ekosistem.</p>
-                </div>
-                <div class="note-footer">
-                    <span>Oleh: Rina (X E-1)</span>
-                    <button class="btn-download" onclick="downloadNote('Keanekaragaman Hayati')">Unduh</button>
-                </div>
-            </div>
-
-            <!-- Komentar: Kartu Catatan Kelas 11 -->
-            <div class="note-card" data-grade="11" data-title="matematika barisan dan deret">
-                <div>
-                    <span class="badge">Matematika Kelas 11</span>
-                    <h3>Barisan & Deret Aritmatika</h3>
-                    <p>Rumus cepat suku ke-n, jumlah n suku pertama, beserta 5 contoh soal pembahasan.</p>
-                </div>
-                <div class="note-footer">
-                    <span>Oleh: Budi (XI IPA)</span>
-                    <button class="btn-download" onclick="downloadNote('Barisan & Deret Aritmatika')">Unduh</button>
-                </div>
-            </div>
-
-            <!-- Komentar: Kartu Catatan Kelas 12 -->
-            <div class="note-card" data-grade="12" data-title="kimia sel volta dan redoks">
-                <div>
-                    <span class="badge">Kimia Kelas 12</span>
-                    <h3>Sel Volta & Reaksi Redoks</h3>
-                    <p>Cara mudah menghitung potensial sel standar (E°cell) dan diagram sel elektrokimia.</p>
-                </div>
-                <div class="note-footer">
-                    <span>Oleh: Dimas (XII MIPA)</span>
-                    <button class="btn-download" onclick="downloadNote('Sel Volta & Reaksi Redoks')">Unduh</button>
-                </div>
-            </div>
-
+            <!-- Kartu catatan akan dimasukkan secara dinamis via JavaScript -->
         </div>
     </main>
 
-    <!-- Komentar: Kotak Formulir Melayang (MODAL TAMBAH CATATAN) -->
+    <!-- Formulir Melayang (MODAL TAMBAH CATATAN) -->
     <div class="modal-overlay" id="uploadModal">
         <div class="modal-box">
             <h2>Bagikan Catatanmu</h2>
@@ -107,12 +66,17 @@
                 <input type="text" id="inputTitle" placeholder="Contoh: Permintaan dan Penawaran">
             </div>
             <div class="form-group">
-                <label>Deskripsi Singkat</label>
+                <label>Deskripsi Singkat / Ringkasan</label>
                 <textarea id="inputDesc" rows="3" placeholder="Jelaskan isi singkat ringkasanmu..."></textarea>
             </div>
             <div class="form-group">
                 <label>Nama Pembuat / Pengunggah</label>
                 <input type="text" id="inputAuthor" placeholder="Nama & Kelasmu">
+            </div>
+            <!-- Input Berkas untuk Upload PDF/Gambar/Dokumen -->
+            <div class="form-group">
+                <label>Lampirkan Berkas (PDF / Gambar / Doc) - <i>Opsional</i></label>
+                <input type="file" id="inputFile" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.txt">
             </div>
             <div class="modal-actions">
                 <button class="btn-secondary" onclick="toggleModal(false)">Batal</button>
@@ -121,13 +85,13 @@
         </div>
     </div>
 
-    <!-- Komentar: Bagian Bawah Web (FOOTER) dengan Nama Pembuat -->
+    <!-- Bagian Bawah Web (FOOTER) -->
     <footer>
         <p>&copy; 2026 NotesShare SMA Negeri Kesamben Jombang.</p>
         <p>Dibuat dan dikembangkan oleh: <strong>Siswa SMANEKA / [Nama Anda]</strong></p>
     </footer>
 
-    <!-- Komentar: Menghubungkan file interaktif JavaScript eksternal -->
+    <!-- Menghubungkan file interaktif JavaScript eksternal -->
     <script src="script.js"></script>
 </body>
 </html>
