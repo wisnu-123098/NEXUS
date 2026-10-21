@@ -1,8 +1,11 @@
 let notes = [];
+let readLater = [];
 let currentGrade = 'all';
+let isShowingReadLater = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     loadNotesFromStorage();
+    loadReadLaterFromStorage();
 });
 
 function toggleModal(isOpen) {
@@ -59,8 +62,52 @@ function loadNotesFromStorage() {
     renderNotes();
 }
 
+function loadReadLaterFromStorage() {
+    const savedReadLater = localStorage.getItem('nexus_smaneka_readlater');
+    if (savedReadLater) {
+        readLater = JSON.parse(savedReadLater);
+    }
+    updateReadLaterCount();
+}
+
 function saveNotesToStorage() {
     localStorage.setItem('nexus_smaneka_notes', JSON.stringify(notes));
+}
+
+function saveReadLaterToStorage() {
+    localStorage.setItem('nexus_smaneka_readlater', JSON.stringify(readLater));
+    updateReadLaterCount();
+}
+
+function updateReadLaterCount() {
+    document.getElementById('readLaterCount').innerText = readLater.length;
+}
+
+function toggleReadLater(id) {
+    if (readLater.includes(id)) {
+        readLater = readLater.filter(rId => rId !== id);
+    } else {
+        readLater.push(id);
+    }
+    saveReadLaterToStorage();
+    renderNotes();
+}
+
+function toggleReadLaterView() {
+    isShowingReadLater = !isShowingReadLater;
+    const btn = document.getElementById('readLaterToggleBtn');
+    const title = document.getElementById('catalogTitle');
+    
+    if (isShowingReadLater) {
+        btn.style.background = 'var(--primary)';
+        btn.style.color = '#fff';
+        title.innerText = '⏳ Daftar Baca Nanti';
+    } else {
+        btn.style.background = 'rgba(255, 255, 255, 0.05)';
+        btn.style.color = 'var(--text-main)';
+        title.innerText = 'Katalog Catatan & Video';
+    }
+    renderNotes();
 }
 
 function getEmbedVideoHtml(url) {
@@ -97,7 +144,12 @@ function renderNotes() {
         }
     });
 
-    notes.forEach(note => {
+    let displayNotes = notes;
+    if (isShowingReadLater) {
+        displayNotes = notes.filter(note => readLater.includes(note.id));
+    }
+
+    displayNotes.forEach(note => {
         const searchKeyword = `${note.subject} ${note.title} ${note.author}`.toLowerCase();
         const card = document.createElement('div');
         card.className = 'note-card';
@@ -113,11 +165,18 @@ function renderNotes() {
                          </div>`;
         }
 
+        const isReadLater = readLater.includes(note.id);
+
         card.innerHTML = `
             <div>
                 <div class="card-top">
                     <span class="badge">${note.subject} • Kelas ${note.grade}</span>
-                    <button class="btn-delete" onclick="deleteNote('${note.id}')" title="Hapus Materi">🗑️</button>
+                    <div class="card-actions-top">
+                        <button class="btn-read-later ${isReadLater ? 'active-read-later' : ''}" onclick="toggleReadLater('${note.id}')" title="${isReadLater ? 'Hapus dari Baca Nanti' : 'Simpan ke Baca Nanti'}">
+                            ${isReadLater ? '⏳' : '⌛'}
+                        </button>
+                        <button class="btn-delete" onclick="deleteNote('${note.id}')" title="Hapus Materi">🗑️</button>
+                    </div>
                 </div>
                 <h3>${note.title}</h3>
                 <p>${note.desc}</p>
@@ -141,7 +200,9 @@ function renderNotes() {
 function deleteNote(id) {
     if (confirm("Apakah Anda yakin ingin menghapus materi ini?")) {
         notes = notes.filter(note => note.id !== id);
+        readLater = readLater.filter(rId => rId !== id);
         saveNotesToStorage();
+        saveReadLaterToStorage();
         renderNotes();
     }
 }
