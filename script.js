@@ -1,33 +1,33 @@
-// Array global untuk menyimpan data catatan & video
+// Array global data catatan
 let notes = [];
 let currentGrade = 'all';
 
-// Jalankan otomatis saat halaman selesai dimuat
+// Jalankan saat dokumen selesai dimuat
 document.addEventListener('DOMContentLoaded', () => {
     loadNotesFromStorage();
 });
 
-// Buka/Tutup Modal Form Upload
+// Buka / Tutup Modal Upload
 function toggleModal(isOpen) {
     const modal = document.getElementById('uploadModal');
     modal.style.display = isOpen ? 'flex' : 'none';
 }
 
-// Memuat data dari localStorage atau inisialisasi contoh data awal
+// Memuat data dari LocalStorage
 function loadNotesFromStorage() {
-    const savedNotes = localStorage.getItem('smaneka_notes');
+    const savedNotes = localStorage.getItem('nexus_smaneka_notes');
 
     if (savedNotes) {
         notes = JSON.parse(savedNotes);
     } else {
-        // Data default jika penyimpanan browser masih kosong
+        // Data default awal
         notes = [
             {
                 id: '1',
                 grade: '10',
                 subject: 'Biologi',
                 title: 'Keanekaragaman Hayati & Ekosistem',
-                desc: 'Ringkasan materi tingkatan keanekaragaman hayati, flora, fauna, dan komponen ekosistem.',
+                desc: 'Ringkasan lengkap tingkatan keanekaragaman hayati, konsep rantai makanan, dan komponen ekosistem.',
                 author: 'Rina (X E-1)',
                 videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 fileDataUrl: null,
@@ -39,7 +39,7 @@ function loadNotesFromStorage() {
                 grade: '11',
                 subject: 'Matematika',
                 title: 'Barisan & Deret Aritmatika',
-                desc: 'Rumus cepat suku ke-n, jumlah n suku pertama, beserta pembahasan latihan soal.',
+                desc: 'Rumus cepat suku ke-n, pembahasan latihan soal, serta penerapan deret aritmatika.',
                 author: 'Budi (XI IPA)',
                 videoUrl: '',
                 fileDataUrl: null,
@@ -51,7 +51,7 @@ function loadNotesFromStorage() {
                 grade: '12',
                 subject: 'Kimia',
                 title: 'Sel Volta & Reaksi Redoks',
-                desc: 'Cara mudah menghitung potensial sel standar (E°cell) dan diagram sel elektrokimia.',
+                desc: 'Cara ringkas menghitung potensial sel standar (E°cell) dan menyusun diagram sel elektrokimia.',
                 author: 'Dimas (XII MIPA)',
                 videoUrl: '',
                 fileDataUrl: null,
@@ -65,41 +65,38 @@ function loadNotesFromStorage() {
     renderNotes();
 }
 
-// Menyimpan data array catatan ke localStorage
+// Simpan array ke LocalStorage
 function saveNotesToStorage() {
-    localStorage.setItem('smaneka_notes', JSON.stringify(notes));
+    localStorage.setItem('nexus_smaneka_notes', JSON.stringify(notes));
 }
 
-// Mengonversi URL YouTube menjadi format iframe embed
+// Parse Link YouTube
 function getEmbedVideoHtml(url) {
     if (!url) return '';
-    
-    // Cek jika link merupakan link YouTube
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
 
     if (match && match[2].length === 11) {
-        const videoId = match[2];
         return `<div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/${match[2]}" allowfullscreen></iframe>
                 </div>`;
     }
 
-    // Jika berupa link MP4 / video direct link
     if (url.match(/\.(mp4|webm|ogg)$/i)) {
         return `<div class="video-container">
                     <video controls src="${url}"></video>
                 </div>`;
     }
 
-    // Fallback jika berupa link eksternal biasa
-    return `<p><a href="${url}" target="_blank" style="color: var(--primary); text-decoration: underline;">📺 Tonton Video Pembelajaran</a></p>`;
+    return `<p style="margin-bottom:1rem;"><a href="${url}" target="_blank" style="color:var(--accent);">📺 Tonton Video Pembelajaran</a></p>`;
 }
 
-// Menampilkan seluruh kartu ke dalam grid HTML
+// Menampilkan Kartu & Statistik
 function renderNotes() {
     const notesGrid = document.getElementById('notesGrid');
     notesGrid.innerHTML = '';
+
+    let videoCount = 0;
 
     notes.forEach(note => {
         const searchKeyword = `${note.subject} ${note.title}`.toLowerCase();
@@ -108,49 +105,52 @@ function renderNotes() {
         card.setAttribute('data-grade', note.grade);
         card.setAttribute('data-title', searchKeyword);
 
-        // Menyiapkan tampilan video jika ada
         let videoHtml = '';
         if (note.videoUrl) {
             videoHtml = getEmbedVideoHtml(note.videoUrl);
+            videoCount++;
         } else if (note.fileType && note.fileType.startsWith('video/')) {
             videoHtml = `<div class="video-container">
                             <video controls src="${note.fileDataUrl}"></video>
                          </div>`;
+            videoCount++;
         }
 
         card.innerHTML = `
             <div>
-                <div class="badge-wrapper">
-                    <span class="badge">${note.subject} Kelas ${note.grade}</span>
-                    <button class="btn-delete" onclick="deleteNote('${note.id}')" title="Hapus Catatan">🗑️</button>
+                <div class="card-top">
+                    <span class="badge">${note.subject} • Kelas ${note.grade}</span>
+                    <button class="btn-delete" onclick="deleteNote('${note.id}')" title="Hapus Materi">🗑️</button>
                 </div>
                 <h3>${note.title}</h3>
                 <p>${note.desc}</p>
                 ${videoHtml}
             </div>
-            <div class="note-footer">
-                <span>Oleh: ${note.author}</span>
+            <div class="card-footer">
+                <span>Oleh: <strong>${note.author}</strong></span>
                 <button class="btn-download" onclick="downloadNote('${note.id}')">Unduh</button>
             </div>
         `;
         notesGrid.appendChild(card);
     });
 
+    // Update Angka Statistik
+    document.getElementById('statTotal').innerText = notes.length;
+    document.getElementById('statVideos').innerText = videoCount;
+
     applyFilters();
 }
 
-// Fitur HAPUS Catatan
+// Fitur Hapus Catatan
 function deleteNote(id) {
-    const confirmDelete = confirm("Apakah Anda yakin ingin menghapus catatan/video ini?");
-    if (confirmDelete) {
+    if (confirm("Apakah Anda yakin ingin menghapus materi ini?")) {
         notes = notes.filter(note => note.id !== id);
         saveNotesToStorage();
         renderNotes();
-        alert("Catatan berhasil dihapus!");
     }
 }
 
-// Logika Mengunduh File / Membuat dokumen Rangkuman
+// Fitur Download Catatan
 function downloadNote(id) {
     const note = notes.find(n => n.id === id);
     if (!note) return;
@@ -164,24 +164,24 @@ function downloadNote(id) {
         document.body.removeChild(a);
     } else {
         const content = `=====================================\n` +
-                        `  CATATAN: ${note.title.toUpperCase()}\n` +
+                        `  NEXUS SMANEKA: ${note.title.toUpperCase()}\n` +
                         `=====================================\n\n` +
                         `Mata Pelajaran : ${note.subject}\n` +
                         `Kelas          : Kelas ${note.grade}\n` +
                         `Penulis        : ${note.author}\n` +
                         (note.videoUrl ? `Link Video     : ${note.videoUrl}\n` : '') +
-                        `-------------------------------------\n` +
+                        `\n-------------------------------------\n` +
                         `RINGKASAN MATERI:\n` +
                         `-------------------------------------\n` +
                         `${note.desc}\n\n` +
                         `-------------------------------------\n` +
-                        `Diunduh dari NotesShare SMANEKA`;
+                        `Diunduh dari NEXUS SMANEKA Platform`;
 
         const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${note.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_SMANEKA.txt`;
+        a.download = `${note.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_NEXUS.txt`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -189,17 +189,17 @@ function downloadNote(id) {
     }
 }
 
-// Filter berdasarkan Tingkat Kelas
+// Filter Berdasarkan Kelas
 function filterGrade(grade) {
     currentGrade = grade;
-    const buttons = document.querySelectorAll('.filter-btn');
+    const buttons = document.querySelectorAll('.filter-pill');
     buttons.forEach(btn => btn.classList.remove('active'));
     if (window.event) window.event.target.classList.add('active');
 
     applyFilters();
 }
 
-// Pencarian Kata Kunci Real-Time
+// Filter Pencarian Text
 function searchNotes() {
     applyFilters();
 }
@@ -207,6 +207,7 @@ function searchNotes() {
 function applyFilters() {
     const query = document.getElementById('searchInput').value.toLowerCase();
     const cards = document.querySelectorAll('.note-card');
+    let visibleCount = 0;
 
     cards.forEach(card => {
         const cardGrade = card.getAttribute('data-grade');
@@ -215,11 +216,18 @@ function applyFilters() {
         const matchGrade = (currentGrade === 'all' || cardGrade === currentGrade);
         const matchSearch = titleData.includes(query);
 
-        card.style.display = (matchGrade && matchSearch) ? "flex" : "none";
+        if (matchGrade && matchSearch) {
+            card.style.display = "flex";
+            visibleCount++;
+        } else {
+            card.style.display = "none";
+        }
     });
+
+    document.getElementById('notesCount').innerText = `Menampilkan ${visibleCount} modul`;
 }
 
-// Menambahkan Catatan / Video Baru
+// Tambah Catatan Baru
 function addNewNote() {
     const grade = document.getElementById('inputGrade').value;
     const subject = document.getElementById('inputSubject').value;
@@ -230,7 +238,7 @@ function addNewNote() {
     const fileInput = document.getElementById('inputFile');
 
     if (!subject || !title || !desc || !author) {
-        alert("Mohon lengkapi data teks wajib (Mata Pelajaran, Judul, Deskripsi, dan Nama)!");
+        alert("Mohon lengkapi data teks (Mata Pelajaran, Judul, Ringkasan, dan Nama)!");
         return;
     }
 
@@ -252,7 +260,7 @@ function addNewNote() {
         saveNotesToStorage();
         renderNotes();
 
-        // Reset Isian Form Input
+        // Reset Isian Form
         document.getElementById('inputSubject').value = '';
         document.getElementById('inputTitle').value = '';
         document.getElementById('inputDesc').value = '';
@@ -261,15 +269,14 @@ function addNewNote() {
         if (fileInput) fileInput.value = '';
 
         toggleModal(false);
-        alert("Catatan / Video berhasil disimpan dan dibagikan!");
+        alert("Materi berhasil dipublikasikan ke NEXUS SMANEKA!");
     };
 
     if (fileInput && fileInput.files && fileInput.files[0]) {
         const file = fileInput.files[0];
 
-        // Pembatasan ukuran memori browser (maksimal 8 MB untuk demo LocalStorage)
         if (file.size > 8 * 1024 * 1024) {
-            alert("Ukuran berkas terlalu besar! Maksimal berkas yang bisa disimpan langsung di browser adalah 8 MB.");
+            alert("Ukuran berkas terlalu besar! Maksimal berkas adalah 8 MB.");
             return;
         }
 
