@@ -62,6 +62,7 @@ function loadNotesFromStorage() {
     renderNotes();
 }
 
+/* Memuat data bookmark dari LocalStorage */
 function loadBookmarksFromStorage() {
     const savedBookmarks = localStorage.getItem('nexus_smaneka_bookmarks');
     if (savedBookmarks) {
@@ -74,6 +75,7 @@ function saveNotesToStorage() {
     localStorage.setItem('nexus_smaneka_notes', JSON.stringify(notes));
 }
 
+/* Menyimpan array bookmark ke LocalStorage */
 function saveBookmarksToStorage() {
     localStorage.setItem('nexus_smaneka_bookmarks', JSON.stringify(bookmarks));
     updateBookmarkCount();
@@ -83,6 +85,7 @@ function updateBookmarkCount() {
     document.getElementById('bookmarkCount').innerText = bookmarks.length;
 }
 
+/* Toggle status Bookmark per item */
 function toggleBookmark(id) {
     if (bookmarks.includes(id)) {
         bookmarks = bookmarks.filter(bId => bId !== id);
@@ -93,6 +96,7 @@ function toggleBookmark(id) {
     renderNotes();
 }
 
+/* Toggle tampilan katalog khusus Favorit */
 function toggleBookmarksView() {
     isShowingBookmarks = !isShowingBookmarks;
     const btn = document.getElementById('bookmarkToggleBtn');
@@ -144,7 +148,7 @@ function renderNotes() {
         }
     });
 
-    // Filter list berdasarkan tab Bookmark jika aktif
+    // Menentukan daftar yang akan ditampilkan (semua / khusus favorit)
     let displayNotes = notes;
     if (isShowingBookmarks) {
         displayNotes = notes.filter(note => bookmarks.includes(note.id));
@@ -191,7 +195,6 @@ function renderNotes() {
         notesGrid.appendChild(card);
     });
 
-    // Update Statistik
     document.getElementById('statTotal').innerText = notes.length;
     document.getElementById('statVideos').innerText = videoCount;
     document.getElementById('statContributors').innerText = uniqueAuthors.size;
