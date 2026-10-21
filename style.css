@@ -1,4 +1,4 @@
-/* Komentar: Pengaturan Dasar & Variabel Warna */
+/* Pengaturan Dasar & Variabel Warna */
 * {
     margin: 0;
     padding: 0;
@@ -22,7 +22,7 @@ body {
     line-height: 1.6;
 }
 
-/* Komentar: Tampilan Bagian Atas / Header */
+/* Header */
 header {
     background: var(--card-bg);
     padding: 1rem 5%;
@@ -65,7 +65,7 @@ header {
     background-color: var(--primary-hover);
 }
 
-/* Komentar: Tampilan Bagian Pengantar / Hero Section */
+/* Hero Section */
 .hero {
     text-align: center;
     padding: 2.5rem 5% 1rem;
@@ -85,7 +85,7 @@ header {
     margin-bottom: 1rem;
 }
 
-/* Komentar: Tampilan Tombol Filter Kelas */
+/* Filter Kelas */
 .filter-container {
     display: flex;
     justify-content: center;
@@ -118,7 +118,7 @@ header {
     border-color: var(--primary);
 }
 
-/* Komentar: Tampilan Kotak Pencarian */
+/* Kotak Pencarian */
 .search-container {
     max-width: 600px;
     margin: 0 auto 2rem;
@@ -140,7 +140,7 @@ header {
     border-color: var(--primary);
 }
 
-/* Komentar: Tampilan Konten Utama (Grid Kartu) */
+/* Konten Utama Grid */
 main {
     max-width: 1100px;
     margin: 0 auto;
@@ -159,7 +159,7 @@ main {
     gap: 1.5rem;
 }
 
-/* Komentar: Tampilan Kartu Catatan Satuan */
+/* Kartu Catatan */
 .note-card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -197,6 +197,7 @@ main {
     font-size: 0.9rem;
     color: var(--text-muted);
     margin-bottom: 1rem;
+    word-break: break-word;
 }
 
 .note-footer {
@@ -226,7 +227,7 @@ main {
     color: white;
 }
 
-/* Komentar: Tampilan Formulir Kotak Melayang (Modal) */
+/* Modal Form Upload */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -246,7 +247,9 @@ main {
     padding: 2rem;
     border-radius: 12px;
     width: 100%;
-    max-width: 450px;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
@@ -306,7 +309,7 @@ main {
     flex: 1;
 }
 
-/* Komentar: Tampilan Bagian Bawah Footer */
+/* Footer */
 footer {
     text-align: center;
     padding: 2rem;
