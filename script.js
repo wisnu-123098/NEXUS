@@ -1,13 +1,8 @@
 let notes = [];
-let bookmarks = [];
-let readLater = [];
 let currentGrade = 'all';
-let currentView = 'all'; // 'all', 'bookmarks', atau 'readLater'
 
 document.addEventListener('DOMContentLoaded', () => {
     loadNotesFromStorage();
-    loadBookmarksFromStorage();
-    loadReadLaterFromStorage();
 });
 
 function toggleModal(isOpen) {
@@ -64,104 +59,8 @@ function loadNotesFromStorage() {
     renderNotes();
 }
 
-function loadBookmarksFromStorage() {
-    const savedBookmarks = localStorage.getItem('nexus_smaneka_bookmarks');
-    if (savedBookmarks) {
-        bookmarks = JSON.parse(savedBookmarks);
-    }
-    updateBookmarkCount();
-}
-
-function loadReadLaterFromStorage() {
-    const savedReadLater = localStorage.getItem('nexus_smaneka_readlater');
-    if (savedReadLater) {
-        readLater = JSON.parse(savedReadLater);
-    }
-    updateReadLaterCount();
-}
-
 function saveNotesToStorage() {
     localStorage.setItem('nexus_smaneka_notes', JSON.stringify(notes));
-}
-
-function saveBookmarksToStorage() {
-    localStorage.setItem('nexus_smaneka_bookmarks', JSON.stringify(bookmarks));
-    updateBookmarkCount();
-}
-
-function saveReadLaterToStorage() {
-    localStorage.setItem('nexus_smaneka_readlater', JSON.stringify(readLater));
-    updateReadLaterCount();
-}
-
-function updateBookmarkCount() {
-    document.getElementById('bookmarkCount').innerText = bookmarks.length;
-}
-
-function updateReadLaterCount() {
-    document.getElementById('readLaterCount').innerText = readLater.length;
-}
-
-function toggleBookmark(id) {
-    if (bookmarks.includes(id)) {
-        bookmarks = bookmarks.filter(bId => bId !== id);
-    } else {
-        bookmarks.push(id);
-    }
-    saveBookmarksToStorage();
-    renderNotes();
-}
-
-function toggleReadLater(id) {
-    if (readLater.includes(id)) {
-        readLater = readLater.filter(rId => rId !== id);
-    } else {
-        readLater.push(id);
-    }
-    saveReadLaterToStorage();
-    renderNotes();
-}
-
-function toggleBookmarksView() {
-    const bookmarkBtn = document.getElementById('bookmarkToggleBtn');
-    const readLaterBtn = document.getElementById('readLaterToggleBtn');
-    const title = document.getElementById('catalogTitle');
-
-    if (currentView === 'bookmarks') {
-        currentView = 'all';
-        bookmarkBtn.style.background = 'rgba(255, 255, 255, 0.05)';
-        bookmarkBtn.style.color = 'var(--text-main)';
-        title.innerText = 'Katalog Catatan & Video';
-    } else {
-        currentView = 'bookmarks';
-        bookmarkBtn.style.background = 'var(--primary)';
-        bookmarkBtn.style.color = '#fff';
-        readLaterBtn.style.background = 'rgba(255, 255, 255, 0.05)';
-        readLaterBtn.style.color = 'var(--text-main)';
-        title.innerText = '⭐ Materi Favorit Tersimpan';
-    }
-    renderNotes();
-}
-
-function toggleReadLaterView() {
-    const bookmarkBtn = document.getElementById('bookmarkToggleBtn');
-    const readLaterBtn = document.getElementById('readLaterToggleBtn');
-    const title = document.getElementById('catalogTitle');
-
-    if (currentView === 'readLater') {
-        currentView = 'all';
-        readLaterBtn.style.background = 'rgba(255, 255, 255, 0.05)';
-        readLaterBtn.style.color = 'var(--text-main)';
-        title.innerText = 'Katalog Catatan & Video';
-    } else {
-        currentView = 'readLater';
-        readLaterBtn.style.background = 'var(--primary)';
-        readLaterBtn.style.color = '#fff';
-        bookmarkBtn.style.background = 'rgba(255, 255, 255, 0.05)';
-        bookmarkBtn.style.color = 'var(--text-main)';
-        title.innerText = '⏳ Daftar Baca Nanti';
-    }
-    renderNotes();
 }
 
 function getEmbedVideoHtml(url) {
@@ -198,14 +97,7 @@ function renderNotes() {
         }
     });
 
-    let displayNotes = notes;
-    if (currentView === 'bookmarks') {
-        displayNotes = notes.filter(note => bookmarks.includes(note.id));
-    } else if (currentView === 'readLater') {
-        displayNotes = notes.filter(note => readLater.includes(note.id));
-    }
-
-    displayNotes.forEach(note => {
+    notes.forEach(note => {
         const searchKeyword = `${note.subject} ${note.title} ${note.author}`.toLowerCase();
         const card = document.createElement('div');
         card.className = 'note-card';
@@ -221,22 +113,11 @@ function renderNotes() {
                          </div>`;
         }
 
-        const isBookmarked = bookmarks.includes(note.id);
-        const isReadLater = readLater.includes(note.id);
-
         card.innerHTML = `
             <div>
                 <div class="card-top">
                     <span class="badge">${note.subject} • Kelas ${note.grade}</span>
-                    <div class="card-actions-top">
-                        <button class="btn-read-later ${isReadLater ? 'active-read-later' : ''}" onclick="toggleReadLater('${note.id}')" title="${isReadLater ? 'Hapus dari Baca Nanti' : 'Simpan ke Baca Nanti'}">
-                            ${isReadLater ? '⏳' : '⌛'}
-                        </button>
-                        <button class="btn-bookmark ${isBookmarked ? 'bookmarked' : ''}" onclick="toggleBookmark('${note.id}')" title="${isBookmarked ? 'Hapus Favorit' : 'Tambah Favorit'}">
-                            ${isBookmarked ? '⭐' : '☆'}
-                        </button>
-                        <button class="btn-delete" onclick="deleteNote('${note.id}')" title="Hapus Materi">🗑️</button>
-                    </div>
+                    <button class="btn-delete" onclick="deleteNote('${note.id}')" title="Hapus Materi">🗑️</button>
                 </div>
                 <h3>${note.title}</h3>
                 <p>${note.desc}</p>
@@ -260,11 +141,7 @@ function renderNotes() {
 function deleteNote(id) {
     if (confirm("Apakah Anda yakin ingin menghapus materi ini?")) {
         notes = notes.filter(note => note.id !== id);
-        bookmarks = bookmarks.filter(bId => bId !== id);
-        readLater = readLater.filter(rId => rId !== id);
         saveNotesToStorage();
-        saveBookmarksToStorage();
-        saveReadLaterToStorage();
         renderNotes();
     }
 }
