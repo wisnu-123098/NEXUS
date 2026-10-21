@@ -1,26 +1,24 @@
-// Array global data catatan
 let notes = [];
+let bookmarks = [];
 let currentGrade = 'all';
+let isShowingBookmarks = false;
 
-// Jalankan saat dokumen selesai dimuat
 document.addEventListener('DOMContentLoaded', () => {
     loadNotesFromStorage();
+    loadBookmarksFromStorage();
 });
 
-// Buka / Tutup Modal Upload
 function toggleModal(isOpen) {
     const modal = document.getElementById('uploadModal');
     modal.style.display = isOpen ? 'flex' : 'none';
 }
 
-// Memuat data dari LocalStorage
 function loadNotesFromStorage() {
     const savedNotes = localStorage.getItem('nexus_smaneka_notes');
 
     if (savedNotes) {
         notes = JSON.parse(savedNotes);
     } else {
-        // Data default awal
         notes = [
             {
                 id: '1',
@@ -61,16 +59,57 @@ function loadNotesFromStorage() {
         ];
         saveNotesToStorage();
     }
-
     renderNotes();
 }
 
-// Simpan array ke LocalStorage
+function loadBookmarksFromStorage() {
+    const savedBookmarks = localStorage.getItem('nexus_smaneka_bookmarks');
+    if (savedBookmarks) {
+        bookmarks = JSON.parse(savedBookmarks);
+    }
+    updateBookmarkCount();
+}
+
 function saveNotesToStorage() {
     localStorage.setItem('nexus_smaneka_notes', JSON.stringify(notes));
 }
 
-// Parse Link YouTube
+function saveBookmarksToStorage() {
+    localStorage.setItem('nexus_smaneka_bookmarks', JSON.stringify(bookmarks));
+    updateBookmarkCount();
+}
+
+function updateBookmarkCount() {
+    document.getElementById('bookmarkCount').innerText = bookmarks.length;
+}
+
+function toggleBookmark(id) {
+    if (bookmarks.includes(id)) {
+        bookmarks = bookmarks.filter(bId => bId !== id);
+    } else {
+        bookmarks.push(id);
+    }
+    saveBookmarksToStorage();
+    renderNotes();
+}
+
+function toggleBookmarksView() {
+    isShowingBookmarks = !isShowingBookmarks;
+    const btn = document.getElementById('bookmarkToggleBtn');
+    const title = document.getElementById('catalogTitle');
+    
+    if (isShowingBookmarks) {
+        btn.style.background = 'var(--primary)';
+        btn.style.color = '#fff';
+        title.innerText = '⭐ Materi Favorit Tersimpan';
+    } else {
+        btn.style.background = 'rgba(255, 255, 255, 0.05)';
+        btn.style.color = 'var(--text-main)';
+        title.innerText = 'Katalog Catatan & Video';
+    }
+    renderNotes();
+}
+
 function getEmbedVideoHtml(url) {
     if (!url) return '';
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -91,15 +130,28 @@ function getEmbedVideoHtml(url) {
     return `<p style="margin-bottom:1rem;"><a href="${url}" target="_blank" style="color:var(--accent);">📺 Tonton Video Pembelajaran</a></p>`;
 }
 
-// Menampilkan Kartu & Statistik
 function renderNotes() {
     const notesGrid = document.getElementById('notesGrid');
     notesGrid.innerHTML = '';
 
     let videoCount = 0;
+    let uniqueAuthors = new Set();
 
     notes.forEach(note => {
-        const searchKeyword = `${note.subject} ${note.title}`.toLowerCase();
+        uniqueAuthors.add(note.author);
+        if (note.videoUrl || (note.fileType && note.fileType.startsWith('video/'))) {
+            videoCount++;
+        }
+    });
+
+    // Filter list berdasarkan tab Bookmark jika aktif
+    let displayNotes = notes;
+    if (isShowingBookmarks) {
+        displayNotes = notes.filter(note => bookmarks.includes(note.id));
+    }
+
+    displayNotes.forEach(note => {
+        const searchKeyword = `${note.subject} ${note.title} ${note.author}`.toLowerCase();
         const card = document.createElement('div');
         card.className = 'note-card';
         card.setAttribute('data-grade', note.grade);
@@ -108,19 +160,24 @@ function renderNotes() {
         let videoHtml = '';
         if (note.videoUrl) {
             videoHtml = getEmbedVideoHtml(note.videoUrl);
-            videoCount++;
         } else if (note.fileType && note.fileType.startsWith('video/')) {
             videoHtml = `<div class="video-container">
                             <video controls src="${note.fileDataUrl}"></video>
                          </div>`;
-            videoCount++;
         }
+
+        const isBookmarked = bookmarks.includes(note.id);
 
         card.innerHTML = `
             <div>
                 <div class="card-top">
                     <span class="badge">${note.subject} • Kelas ${note.grade}</span>
-                    <button class="btn-delete" onclick="deleteNote('${note.id}')" title="Hapus Materi">🗑️</button>
+                    <div class="card-actions-top">
+                        <button class="btn-bookmark ${isBookmarked ? 'bookmarked' : ''}" onclick="toggleBookmark('${note.id}')" title="Simpan Favorit">
+                            ${isBookmarked ? '⭐' : '☆'}
+                        </button>
+                        <button class="btn-delete" onclick="deleteNote('${note.id}')" title="Hapus Materi">🗑️</button>
+                    </div>
                 </div>
                 <h3>${note.title}</h3>
                 <p>${note.desc}</p>
@@ -134,23 +191,24 @@ function renderNotes() {
         notesGrid.appendChild(card);
     });
 
-    // Update Angka Statistik
+    // Update Statistik
     document.getElementById('statTotal').innerText = notes.length;
     document.getElementById('statVideos').innerText = videoCount;
+    document.getElementById('statContributors').innerText = uniqueAuthors.size;
 
     applyFilters();
 }
 
-// Fitur Hapus Catatan
 function deleteNote(id) {
     if (confirm("Apakah Anda yakin ingin menghapus materi ini?")) {
         notes = notes.filter(note => note.id !== id);
+        bookmarks = bookmarks.filter(bId => bId !== id);
         saveNotesToStorage();
+        saveBookmarksToStorage();
         renderNotes();
     }
 }
 
-// Fitur Download Catatan
 function downloadNote(id) {
     const note = notes.find(n => n.id === id);
     if (!note) return;
@@ -189,7 +247,6 @@ function downloadNote(id) {
     }
 }
 
-// Filter Berdasarkan Kelas
 function filterGrade(grade) {
     currentGrade = grade;
     const buttons = document.querySelectorAll('.filter-pill');
@@ -199,7 +256,6 @@ function filterGrade(grade) {
     applyFilters();
 }
 
-// Filter Pencarian Text
 function searchNotes() {
     applyFilters();
 }
@@ -227,7 +283,6 @@ function applyFilters() {
     document.getElementById('notesCount').innerText = `Menampilkan ${visibleCount} modul`;
 }
 
-// Tambah Catatan Baru
 function addNewNote() {
     const grade = document.getElementById('inputGrade').value;
     const subject = document.getElementById('inputSubject').value;
@@ -260,7 +315,6 @@ function addNewNote() {
         saveNotesToStorage();
         renderNotes();
 
-        // Reset Isian Form
         document.getElementById('inputSubject').value = '';
         document.getElementById('inputTitle').value = '';
         document.getElementById('inputDesc').value = '';
