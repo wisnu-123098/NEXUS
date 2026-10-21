@@ -3,28 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NotesShare SMANEKA - Platform Berbagi Catatan</title>
-    <!-- Menghubungkan file gaya CSS eksternal -->
+    <title>NotesShare SMANEKA - Platform Berbagi Catatan & Video</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Header / Menu Atas dengan Logo -->
+    <!-- Header / Menu Atas -->
     <header>
         <div class="logo">
             <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjyFQBnfPD9f9ubP2808EGs47t_3Qd40i0AvKRfjZ7nZqHKEFxsrX3sskWWz2US6BeB7W9ELOiEJ0xS31oyRKuiocW2njHPrfdHUfhT8MJEut1vrl3SIvLu8hrFJ7n0oiQKXJXAPn6ZIOpT/s1600/SMANEKA3.png.jpg" alt="Logo SMA Negeri Kesamben" class="logo-img">
             <span>NotesShare SMANEKA</span>
         </div>
-        <button class="nav-btn" onclick="toggleModal(true)">+ Unggah Catatan</button>
+        <button class="nav-btn" onclick="toggleModal(true)">+ Unggah Catatan / Video</button>
     </header>
 
-    <!-- Bagian Pengantar (HERO SECTION) -->
+    <!-- Bagian Hero -->
     <section class="hero">
-        <h1>Pusat Catatan & Rangkuman Pelajaran</h1>
-        <p>Cari ringkasan materi, rumus cepat, dan peta konsep dari siswa SMA Negeri Kesamben.</p>
+        <h1>Pusat Catatan & Video Pembelajaran</h1>
+        <p>Cari ringkasan materi, rumus cepat, peta konsep, dan video penjelasan dari siswa SMANEKA.</p>
     </section>
 
-    <!-- Tombol Filter Berdasarkan Kelas (Kelas 10, 11, 12) -->
+    <!-- Tombol Filter Kelas -->
     <div class="filter-container">
         <button class="filter-btn active" onclick="filterGrade('all')">Semua Kelas</button>
         <button class="filter-btn" onclick="filterGrade('10')">Kelas 10</button>
@@ -32,23 +31,23 @@
         <button class="filter-btn" onclick="filterGrade('12')">Kelas 12</button>
     </div>
 
-    <!-- Kotak Pencarian Catatan -->
+    <!-- Kotak Pencarian -->
     <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari mata pelajaran atau topik..." onkeyup="searchNotes()">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari mata pelajaran, topik, atau video..." onkeyup="searchNotes()">
     </div>
 
-    <!-- Bagian Konten Utama Daftar Catatan -->
+    <!-- Konten Utama Grid Catatan -->
     <main>
-        <div class="section-title">Daftar Catatan Siswa</div>
+        <div class="section-title">Daftar Catatan & Video Pembelajaran</div>
         <div class="notes-grid" id="notesGrid">
-            <!-- Kartu catatan akan dimasukkan secara dinamis via JavaScript -->
+            <!-- Kartu catatan/video dimasukkan secara dinamis oleh JavaScript -->
         </div>
     </main>
 
-    <!-- Formulir Melayang (MODAL TAMBAH CATATAN) -->
+    <!-- Modal Form Unggah Catatan / Video -->
     <div class="modal-overlay" id="uploadModal">
         <div class="modal-box">
-            <h2>Bagikan Catatanmu</h2>
+            <h2>Bagikan Materi Pembelajaran</h2>
             <div class="form-group">
                 <label>Pilih Tingkat Kelas</label>
                 <select id="inputGrade" class="search-input">
@@ -59,24 +58,29 @@
             </div>
             <div class="form-group">
                 <label>Mata Pelajaran / Kategori</label>
-                <input type="text" id="inputSubject" placeholder="Contoh: Ekonomi">
+                <input type="text" id="inputSubject" placeholder="Contoh: Fisika / Biologi">
             </div>
             <div class="form-group">
-                <label>Judul Catatan</label>
-                <input type="text" id="inputTitle" placeholder="Contoh: Permintaan dan Penawaran">
+                <label>Judul Catatan / Video</label>
+                <input type="text" id="inputTitle" placeholder="Contoh: Pembahasan Hukum Newton">
             </div>
             <div class="form-group">
                 <label>Deskripsi Singkat / Ringkasan</label>
-                <textarea id="inputDesc" rows="3" placeholder="Jelaskan isi singkat ringkasanmu..."></textarea>
+                <textarea id="inputDesc" rows="3" placeholder="Penjelasan singkat materi atau isi video..."></textarea>
             </div>
             <div class="form-group">
                 <label>Nama Pembuat / Pengunggah</label>
                 <input type="text" id="inputAuthor" placeholder="Nama & Kelasmu">
             </div>
-            <!-- Input Berkas untuk Upload PDF/Gambar/Dokumen -->
+            <!-- Fitur Link Video -->
             <div class="form-group">
-                <label>Lampirkan Berkas (PDF / Gambar / Doc) - <i>Opsional</i></label>
-                <input type="file" id="inputFile" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.txt">
+                <label>Link Video Pembelajaran (YouTube / Drive) - <i>Opsional</i></label>
+                <input type="url" id="inputVideoUrl" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+            <!-- Fitur Upload Dokumen / Video Lokal -->
+            <div class="form-group">
+                <label>Lampirkan Berkas (PDF / Gambar / File Video MP4) - <i>Opsional</i></label>
+                <input type="file" id="inputFile" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.txt,.mp4,.webm">
             </div>
             <div class="modal-actions">
                 <button class="btn-secondary" onclick="toggleModal(false)">Batal</button>
@@ -85,13 +89,12 @@
         </div>
     </div>
 
-    <!-- Bagian Bawah Web (FOOTER) -->
+    <!-- Footer -->
     <footer>
         <p>&copy; 2026 NotesShare SMA Negeri Kesamben Jombang.</p>
         <p>Dibuat dan dikembangkan oleh: <strong>Siswa SMANEKA / [Nama Anda]</strong></p>
     </footer>
 
-    <!-- Menghubungkan file interaktif JavaScript eksternal -->
     <script src="script.js"></script>
 </body>
 </html>
