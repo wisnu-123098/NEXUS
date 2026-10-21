@@ -9,6 +9,8 @@
 :root {
     --primary: #2563eb;
     --primary-hover: #1d4ed8;
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
     --bg-color: #f8fafc;
     --card-bg: #ffffff;
     --text-main: #1e293b;
@@ -155,11 +157,11 @@ main {
 
 .notes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
 }
 
-/* Kartu Catatan */
+/* Kartu Catatan / Video */
 .note-card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -170,11 +172,19 @@ main {
     flex-direction: column;
     justify-content: space-between;
     transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
 }
 
 .note-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+}
+
+.badge-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
 }
 
 .badge {
@@ -185,7 +195,23 @@ main {
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+}
+
+/* Tombol Hapus Catatan */
+.btn-delete {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 2px 6px;
+    transition: all 0.2s;
+}
+
+.btn-delete:hover {
+    color: var(--danger);
+    background: #fee2e2;
 }
 
 .note-card h3 {
@@ -198,6 +224,23 @@ main {
     color: var(--text-muted);
     margin-bottom: 1rem;
     word-break: break-word;
+}
+
+/* Container Media Video */
+.video-container {
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+}
+
+.video-container video,
+.video-container iframe {
+    width: 100%;
+    max-height: 200px;
+    aspect-ratio: 16 / 9;
+    border: none;
+    display: block;
 }
 
 .note-footer {
