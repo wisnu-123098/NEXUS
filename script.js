@@ -1,69 +1,23 @@
-// Fungsi Membuka / Menutup Modal Form
-function toggleModal(isOpen) {
-    const modal = document.getElementById('uploadModal');
-    modal.style.display = isOpen ? 'flex' : 'none';
+/* Mengatur tampilan dasar halaman web */
+body {
+  background-color: #00ffff; /* Warna latar belakang biru muda */
+  font-family: Arial, sans-serif; /* Jenis huruf agar mudah dibaca */
+  color: #ffa500; /* Warna teks oranye */
 }
 
-// Fungsi Simulasi Unduh Catatan
-function downloadNote(title) {
-    alert("Berhasil! Mengunduh ringkasan materi: " + title);
+/* Mengatur kotak kartu profil agar berada di tengah dan berbentuk kotak rapi */
+.kartu-profil {
+  width: 300px;
+  margin: 50px auto;
+  padding: 20px; /* Diperbaiki: menambahkan titik koma */
+  background-color: white;
+  border-radius: 15px; /* Diperbaiki: menambahkan titik koma */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Diperbaiki: format rgba yang benar */
+  text-align: center; /* Mengatur teks agar berada di tengah kartu */
 }
 
-// Fungsi Fitur Pencarian Real-Time
-function searchNotes() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    const cards = document.querySelectorAll('.note-card');
-
-    cards.forEach(card => {
-        const titleData = card.getAttribute('data-title');
-        if (titleData.includes(query)) {
-            card.style.display = "flex";
-        } else {
-            card.style.display = "none";
-        }
-    });
-}
-
-// Fungsi Tambah Catatan Baru secara Interaktif
-function addNewNote() {
-    const subject = document.getElementById('inputSubject').value;
-    const title = document.getElementById('inputTitle').value;
-    const desc = document.getElementById('inputDesc').value;
-    const author = document.getElementById('inputAuthor').value;
-
-    if (!subject || !title || !desc || !author) {
-        alert("Mohon lengkapi semua data sebelum mengunggah!");
-        return;
-    }
-
-    const notesGrid = document.getElementById('notesGrid');
-    const searchKeyword = (subject + " " + title).toLowerCase();
-
-    // Buat elemen kartu baru
-    const newCard = document.createElement('div');
-    newCard.className = 'note-card';
-    newCard.setAttribute('data-title', searchKeyword);
-    newCard.innerHTML = `
-        <div>
-            <span class="badge">${subject}</span>
-            <h3>${title}</h3>
-            <p>${desc}</p>
-        </div>
-        <div class="note-footer">
-            <span>Oleh: ${author}</span>
-            <button class="btn-download" onclick="downloadNote('${title}')">Unduh</button>
-        </div>
-    `;
-
-    // Masukkan ke urutan paling atas grid
-    notesGrid.prepend(newCard);
-
-    // Reset form dan tutup modal
-    document.getElementById('inputSubject').value = '';
-    document.getElementById('inputTitle').value = '';
-    document.getElementById('inputDesc').value = '';
-    document.getElementById('inputAuthor').value = '';
-    toggleModal(false);
-
-    alert("Catatan berhasil dibagikan ke platform!");
+/* Mengatur tampilan gambar di dalam kartu profil */
+.kartu-profil img {
+  width: 150px; /* Diperbaiki: menambahkan titik koma */
+  border-radius: 50%; /* Membuat foto profil menjadi berbentuk lingkaran */
 }
