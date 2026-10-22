@@ -107,11 +107,23 @@ body {
     flex-direction: column;
 }
 
+/* CSS BARU UNTUK LOGO NEXUS */
+.logo-text-img {
+    height: 20px; /* Atur ketinggian logo agar pas dengan teks sub-merek */
+    width: auto; /* Mempertahankan rasio aspek */
+    margin-bottom: 2px; /* Jarak sedikit dengan sub-teks */
+    border-radius: 4px; /* Optional: sedikit kelembutan pada sudut */
+    display: block; /* Mencegah masalah inline spacing */
+}
+
+/* BAGIAN INI DIHAPUS karena tidak lagi menggunakan teks brand-name */
+/*
 .brand-name {
     font-size: 1.25rem;
     font-weight: 800;
     color: #a855f7;
 }
+*/
 
 .brand-sub {
     font-size: 0.75rem;
